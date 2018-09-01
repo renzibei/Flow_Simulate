@@ -257,10 +257,19 @@ void MainWindow::makeMenu()
     QAction *exitAction = new QAction(tr("退出"), this);
     exitAction->setStatusTip(tr("退出程序"));
     connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
-    QMenuBar *mainMenuBar = new QMenuBar();
-    //mainMenuBar->addMenu(tr("文件"));
-    this->setMenuBar(mainMenuBar);
-    mainMenuBar->addAction(exitAction);
+   // QMenuBar *mainMenuBar = new QMenuBar();
+    //mainMenuBar->clear();
+    QMenu *fileMenu = new QMenu(tr("文件"));
+    //ßmainMenuBar->addMenu(tr("文件"));
+    //this->setMenuBar(mainMenuBar);
+
+    fileMenu->addAction(exitAction);
+    //mainMenuBar->addMenu(fileMenu);
+    //mainMenuBar->addAction(fileMenu->menuAction());
+    //mainMenuBar->show();
+    menuBar()->addMenu(fileMenu);
+    fileMenu->show();
+
 
 }
 

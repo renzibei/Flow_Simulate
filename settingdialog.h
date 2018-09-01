@@ -31,6 +31,7 @@ private:
     Ui::SettingDialog *ui;
     void fillComboBox(int input1, int input2, int output1,
                       int output2, int output3, int size);
+    void makeMenu();
     int dialogMode;
 protected slots:
     void cancelSlot();

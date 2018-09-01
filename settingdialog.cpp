@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include <QString>
 #include <QMessageBox>
+#include <QMenuBar>
 
 
 SettingDialog::SettingDialog(QWidget *parent, int mode, int input1, int input2, int output1,
@@ -12,6 +13,7 @@ SettingDialog::SettingDialog(QWidget *parent, int mode, int input1, int input2, 
     dialogMode(mode)
 {
     ui->setupUi(this);
+    //this->makeMenu();
     ui->dialogNameLabel->setText("<h3>请设置参数</h3>");
     if(mode == 2) {
         ui->verticalLayout->removeItem(ui->sizeHLayout);
@@ -99,6 +101,21 @@ void SettingDialog::sizeNumChanged(int index)
     ui->input2Combo->setCurrentIndex(1);
     ui->output2Combo->setCurrentIndex(1);
     ui->output3Combo->setCurrentIndex(2);
+}
+
+void SettingDialog::makeMenu()
+{
+    QAction *exitAction = new QAction(tr("退出"), this);
+    exitAction->setStatusTip(tr("退出程序"));
+    connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
+    QMenuBar *mainMenuBar = new QMenuBar();
+    mainMenuBar->clear();
+    QMenu *fileMenu = new QMenu(tr("文件"));
+    //ßmainMenuBar->addMenu(tr("文件"));
+    //this->setMenuBar(mainMenuBar);
+    fileMenu->addAction(exitAction);
+    mainMenuBar->addAction(fileMenu->menuAction());
+    mainMenuBar->show();
 }
 
 SettingDialog::~SettingDialog()
