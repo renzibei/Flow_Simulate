@@ -98,68 +98,77 @@
         <property name="title">
          <string/>
         </property>
-        <widget class="QWidget" name="layoutWidget">
-         <property name="geometry">
-          <rect>
-           <x>60</x>
-           <y>10</y>
-           <width>184</width>
-           <height>122</height>
-          </rect>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="1" column="1">
-           <layout class="QGridLayout" name="numGridLayout">
-            <item row="1" column="1">
-             <widget class="QLCDNumber" name="lcdNum2"/>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="outLabel1">
-              <property name="text">
-               <string>出口1:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLCDNumber" name="lcdNum1"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="outLabel2">
-              <property name="text">
-               <string>出口2:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="outLabel3">
-              <property name="text">
-               <string>出口3</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLCDNumber" name="lcdNum3"/>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="speedLabel">
-            <property name="text">
-             <string>流速：</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
+        <layout class="QGridLayout" name="gridLayout_3" columnstretch="0">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,4">
+           <item row="1" column="1">
+            <layout class="QGridLayout" name="numGridLayout">
+             <item row="0" column="0">
+              <widget class="QLabel" name="outLabel1">
+               <property name="text">
+                <string>出口1:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="outLabel2">
+               <property name="text">
+                <string>出口2:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="outLabel3">
+               <property name="text">
+                <string>出口3:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="lcdNum1">
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLabel" name="lcdNum2">
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLabel" name="lcdNum3">
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="speedLabel">
+             <property name="text">
+              <string>流速：</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>

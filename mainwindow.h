@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
+#include "pipeitem.h"
 
 
 namespace Ui {
@@ -20,7 +21,10 @@ public:
     static MainWindow* getInstance();
     void initSettings(int size, int intoPipe1, int intoPipe2, int outPipe1, int outPipe2, int outPipe3);
     void redrawInputOutput(int intoPipe1, int intoPipe2, int outPipe1, int outPipe2, int outPipe3);
+    void changeOnePipeStatus(int index);
 
+public slots:
+    int calculateFlow();
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *pipesScene;
@@ -32,7 +36,7 @@ private:
     int intoPipePos[2];
     int outPipePos[3];
     int pipeLength[200];
-    QGraphicsRectItem *pipeItems[200];
+    PipeItem *pipeItems[200];
 
 
 
@@ -59,7 +63,12 @@ private:
      */
 
     void drawPorts();
-    QPen getCommonPen();
+    /**
+     * @brief getCommonPen
+     * @param visable 是否可见，1为可见， 0不可见
+     * @return
+     */
+    QPen getCommonPen(int visable = 1);
     QRectF getPipeRect(int index);
 
 
@@ -68,6 +77,7 @@ private slots:
     void resetAll();
     int initPipeScene();
     void resetInputOutput();
+
 };
 
 #endif // MAINWINDOW_H
