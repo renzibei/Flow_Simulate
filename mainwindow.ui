@@ -120,7 +120,7 @@
         </property>
         <layout class="QGridLayout" name="gridLayout_3" columnstretch="0">
          <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,4">
+          <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,6">
            <item row="1" column="1">
             <layout class="QGridLayout" name="numGridLayout">
              <item row="0" column="0">
@@ -179,7 +179,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="speedLabel">
              <property name="text">
-              <string>流速：</string>
+              <string>出口流速：</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
