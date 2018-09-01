@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setAlignment();
     this->pipesScene = new QGraphicsScene();
     ui->pipesView->setScene(this->pipesScene);
+    this->makeMenu();
     memset(this->pipeLength, 0, sizeof(this->pipeLength));
     memset(this->intoPipePos, 0, sizeof(this->intoPipePos));
     memset(this->outPipePos, 0, sizeof(this->outPipePos));
@@ -231,7 +232,7 @@ int MainWindow::calculateFlow()
     for(int i = 0; i < this->totalNum + 5; ++i)
         pipesLength[i] = this->pipeLength[i];
     vector<double> results = caluconspeed(this->sizeNum, pipesLength, intoPipePos[0] , intoPipePos[1], outPipePos[0], outPipePos[1], outPipePos[2]);
-    qDebug("results %lf %lf %lf", results[0], results[1], results[2]);
+    //qDebug("results %lf %lf %lf", results[0], results[1], results[2]);
     ui->lcdNum1->setText(QString::number(results[0], 'g', 3));
     ui->lcdNum2->setText(QString::number(results[1], 'g', 3));
     ui->lcdNum3->setText(QString::number(results[2], 'g', 3));
@@ -249,6 +250,18 @@ int MainWindow::calculateFlow()
     ui->lcdNum3->update();
     */
     return 0;
+}
+
+void MainWindow::makeMenu()
+{
+    QAction *exitAction = new QAction(tr("退出"), this);
+    exitAction->setStatusTip(tr("退出程序"));
+    connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
+    QMenuBar *mainMenuBar = new QMenuBar();
+    //mainMenuBar->addMenu(tr("文件"));
+    this->setMenuBar(mainMenuBar);
+    mainMenuBar->addAction(exitAction);
+
 }
 
 MainWindow::~MainWindow()

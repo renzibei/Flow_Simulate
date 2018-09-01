@@ -516,7 +516,7 @@ vector<double> caluconspeed(int num, vector<double>&length, int i1, int i2, int 
 	v[0] = edges[EDGESUM-3].v;
 	v[1] = edges[EDGESUM-2].v;
 	v[2] = edges[EDGESUM-1].v;
-    qDebug("v %lf %lf %lf", v[0], v[1], v[2]);
+    //qDebug("v %lf %lf %lf", v[0], v[1], v[2]);
     //cout << v[0];
 	return v;
 }

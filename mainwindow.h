@@ -71,6 +71,7 @@ private:
     QPen getCommonPen(int visable = 1);
     QRectF getPipeRect(int index);
 
+    void makeMenu();
 
 
 private slots:
