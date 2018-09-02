@@ -42,47 +42,33 @@
 #include <time.h>  
 #include <math.h>
 
-#include <QWidget>
+//#include <QWidget>
 
 using namespace std;
 #define NAX 0.000000001
 
 #include "calculate.h"
 
-struct edge
-{
-	double v; //流速
-	double leng; //管道长度
-	int n1,n2; //边所连接的两个节点，默认从n1流向n2
-}edges[200];
-struct node
-{          
-	vector<int> elist;  //点所连接的边，按照顺时针的顺序存储下来
 
-}nodes[200];
-
-vector< vector<double> >rect(200);//存储方程组(行列式)
-
-bool fr[200]; //深度搜索时判断边是否遍历过
-
-int n,EDGESUM,NODESUM;  //记录网格边长
 
 //函数功能：确定管道中某条管道的长度
 //参数含义：x，管道的编号；leng，管道的长度
-void setedgelength(int x, double leng)
+void BackCompute::setedgelength(int x, double leng)
 {
 	edges[x].leng = leng;
 }
 
 //函数功能：将方程加入到方程组中
 //参数含义：tmp，新的方程
-void addrect(vector<double> &tmp){
+void BackCompute::addrect(vector<double> &tmp){
 	rect.push_back(tmp);
 }
 
+
+
 //函数功能：计算节点(x,y)的dir方向的管道编号。dir为0表示上方，1表示右侧，2表示下方，3表示左侧。若管道存在(不论长度是否为0)则返回对应管道编号，不存在(即不在原始网格内)则返回EDGESUM
 //参数含义：x，节点的横坐标；y节点的纵坐标；dir，询问的节点方向。
-int getdirline(int x, int y, int dir){
+int BackCompute::getdirline(int x, int y, int dir){
 	int e;
 	int sum = x*n+y;
 	if (dir == 0){
@@ -125,7 +111,7 @@ int getdirline(int x, int y, int dir){
 
 //函数功能：计算节点(x,y)的dir方向的管道是否合理，即是否在原始网络中存在。dir为0表示上方，1表示右侧，2表示下方，3表示左侧。
 //参数含义：x，节点的横坐标；y节点的纵坐标；dir，询问的节点方向。
-bool existdir(int x, int y, int dir)
+bool BackCompute::existdir(int x, int y, int dir)
 {
 	int e = getdirline(x,y,dir);
 	if (e>=EDGESUM)
@@ -135,7 +121,7 @@ bool existdir(int x, int y, int dir)
 
 //函数功能：从(x,y)沿着dir方向遍历闭环，遍历到end时，遍历结束。
 //参数含义：x，节点的横坐标；y节点的纵坐标；dir，下一步遍历的节点方向；tmp，存储的方程系数；end，遍历停止的管道。
-void recursionline(int x, int y, int dir, vector<double> &tmp,int end){
+void BackCompute::recursionline(int x, int y, int dir, vector<double> &tmp,int end){
 	int e = getdirline(x,y,dir);
 	if (e>EDGESUM-6)
 		return;
@@ -177,7 +163,7 @@ void recursionline(int x, int y, int dir, vector<double> &tmp,int end){
 
 //函数功能：从(x,y)位置进行深度优先搜索，直到到达边end结束
 //参数含义：x，节点的横坐标；y节点的纵坐标；tmp，存储的方程系数；end，遍历停止的管道。
-bool recursionrect(int x, int y, vector<double> &tmp,int end){
+bool BackCompute::recursionrect(int x, int y, vector<double> &tmp,int end){
 	int xx,yy;
 	for(int i=1; i<5; i++)
 	{
@@ -228,14 +214,15 @@ bool recursionrect(int x, int y, vector<double> &tmp,int end){
 
 //函数功能：从(x,y)位置开始向右寻找闭环路径，直到到达(x,y)下方的边t结束
 //参数含义：x，节点的横坐标；y节点的纵坐标；t，遍历停止的管道编号。
-void findline(int x, int y,int t){
+void BackCompute::findline(int x, int y,int t)
+{
 	vector<double> tmp(EDGESUM+1,0);
 	recursionline(x,y,1,tmp,t);
 }
 
 //函数功能：计算从一个输入端口，到三个输出管道的“电压降”，从而计算得到输出管道两两之间的“电势差”，根据电势差为0，加入方程组
 //参数含义：x1，输入管道编号。
-void findrect(int x1){
+void BackCompute::findrect(int x1){
 	vector<double> tmp(EDGESUM+1,0);
 	for (int i=0; i<EDGESUM; i++)
 		fr[i] = false;
@@ -259,7 +246,7 @@ void findrect(int x1){
 }
 
 //函数功能：初始化方程组（行列式）的值
-void initrect(){    
+void BackCompute::initrect(){
 	for (int i=0;i<EDGESUM-5; i++)	//不存在的管道液体流速为0
 		if (edges[i].leng == 0)
 		{
@@ -355,7 +342,7 @@ double LeastCommonMultiple (double a, double b)
 }
 
 //函数功能：使用行列式计算方程组rect的解。
-void getans()    
+void BackCompute::getans()
 {
 	int n = rect.size();
 
@@ -445,7 +432,7 @@ void getans()
 //函数功能：计算芯片所有管道的液体流速
 //参数含义：num，正方形网格的边长（即网格一行的节点数量，比如8X8的网格，一行有8个节点，num为8）；length，存储网格中每个管道的长度，若管道不存在用0表示；i1,i2,o1,o2,o3
 //				分别表示两个输入管道与三个输出管道在第几列。
-vector<double> caluconspeed(int num, vector<double>&length, int i1, int i2, int o1, int o2, int o3)
+vector<double> BackCompute::caluconspeed(int num, vector<double>&length, int i1, int i2, int o1, int o2, int o3)
 {
 	rect.clear();
 	n = num;

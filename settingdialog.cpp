@@ -13,6 +13,7 @@ SettingDialog::SettingDialog(QWidget *parent, int mode, int input1, int input2, 
     dialogMode(mode)
 {
     ui->setupUi(this);
+    this->setWindowTitle(tr("设置"));
     //this->makeMenu();
     ui->dialogNameLabel->setText("<h3>请设置参数</h3>");
     if(mode == 2) {

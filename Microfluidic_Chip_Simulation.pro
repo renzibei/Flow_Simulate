@@ -27,17 +27,28 @@ SOURCES += \
         mainwindow.cpp \
     settingdialog.cpp \
     calculate.cpp \
-    pipeitem.cpp
+    pipeitem.cpp \
+    setwidthdialog.cpp \
+    askrequestdialog.cpp \
+    waitdialog.cpp \
+    computethread.cpp
 
 HEADERS += \
         mainwindow.h \
     settingdialog.h \
     calculate.h \
-    pipeitem.h
+    pipeitem.h \
+    setwidthdialog.h \
+    askrequestdialog.h \
+    waitdialog.h \
+    computethread.h
 
 FORMS += \
         mainwindow.ui \
-    settingdialog.ui
+    settingdialog.ui \
+    setwidthdialog.ui \
+    askrequestdialog.ui \
+    waitdialog.ui
 
 
 # Default rules for deployment.

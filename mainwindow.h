@@ -5,6 +5,9 @@
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include "pipeitem.h"
+#include <vector>
+
+using std::vector;
 
 
 namespace Ui {
@@ -23,18 +26,30 @@ public:
     void redrawInputOutput(int intoPipe1, int intoPipe2, int outPipe1, int outPipe2, int outPipe3);
     void changeOnePipeStatus(int index);
 
+    int intoPipePos[2];
+    int outPipePos[3];
+    int sizeNum = 8;
+    void finishCompute(vector<double> resultVector);
+
 public slots:
     int calculateFlow();
+    /**
+     * @brief judgePipeWidth 判断序号为index的Pipe能否将宽度调整为width
+     * @param index
+     * @param width
+     * @return 若宽度过大，返回-1，过小则返回-2， 可以则返回0
+     */
+    int judgePipeWidth(int index, int width);
+    void changePipeWidth(PipeItem* pipeItem, int width);
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *pipesScene;
     static MainWindow* instance;
     const int leftPointx = 0, leftPointy = 15;
     const double pixUnit = 1.5;
-    int sizeNum = 8;
+
     int totalNum = 112; //管道总数(不加5根)
-    int intoPipePos[2];
-    int outPipePos[3];
+
     int pipeLength[200];
     PipeItem *pipeItems[200];
 
@@ -78,6 +93,7 @@ private slots:
     void resetAll();
     int initPipeScene();
     void resetInputOutput();
+    void prepareCompute();
 
 };
 

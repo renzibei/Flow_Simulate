@@ -3,6 +3,7 @@
 #include "settingdialog.h"
 #include "calculate.h"
 #include "pipeitem.h"
+#include "askrequestdialog.h"
 
 
 
@@ -20,6 +21,14 @@ void MainWindow::setAlignment()
 
 }
 
+void MainWindow::prepareCompute()
+{
+    askRequestDialog *askDialog = new askRequestDialog();
+    askDialog->show();
+    this->hide();
+
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -27,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->nameLabel->setText("<h1 align=\"center\">Microfluidic Chip Simulation</h1>");
+    this->setWindowTitle(tr("Microfluidic Chip Simulation"));
     this->setAlignment();
     this->pipesScene = new QGraphicsScene();
     ui->pipesView->setScene(this->pipesScene);
@@ -38,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->resetAllButton, SIGNAL(clicked()), this, SLOT(resetAll()));
     connect(ui->randomButton, SIGNAL(clicked()), this, SLOT(initPipeScene()));
     connect(ui->resetInputButton, SIGNAL(clicked()), this, SLOT(resetInputOutput()));
+    connect((ui->generateRequestButton), SIGNAL(clicked()), this, SLOT(prepareCompute()));
     srand((unsigned)time(NULL));
     /*
     ui->lcdNum1->setSmallDecimalPoint(true);
@@ -58,6 +69,14 @@ MainWindow* MainWindow::getInstance()
     if(MainWindow::instance == nullptr)
         MainWindow::instance = new MainWindow();
     return MainWindow::instance;
+}
+
+void MainWindow::finishCompute(vector<double> resultVector)
+{
+    ui->lcdNum1->setText(QString::number(resultVector[0], 'g', 3));
+    ui->lcdNum2->setText(QString::number(resultVector[1], 'g', 3));
+    ui->lcdNum3->setText(QString::number(resultVector[2], 'g', 3));
+    this->repaint();
 }
 
 void MainWindow::initSettings(int size, int intoPipe1, int intoPipe2, int outPipe1, int outPipe2, int outPipe3)
@@ -84,6 +103,31 @@ int MainWindow::addPipeItem(int index)
         newPipeItem->setOpacity(0.01);
     this->pipeItems[index] = newPipeItem;
     this->pipesScene->addItem(newPipeItem);
+    return 0;
+}
+
+int MainWindow::judgePipeWidth(int index, int width)
+{
+    int pipeType = this->getPipeType(index);
+    const int widthSumLimit = 2800;
+    if(width < 20)
+        return -2;
+    if(pipeType == 0) {
+        if(index - 1 >= 0)
+            if(pipeItems[index - 1]->width + width > widthSumLimit)
+                return -1;
+        if(index + 1 < this->totalNum)
+            if(pipeItems[index + 1]->width + width > widthSumLimit)
+                return -1;
+    }
+    if(pipeType == 1) {
+        if(index - this->sizeNum + 1 >=0)
+            if(pipeItems[index - this->sizeNum]->width + width > widthSumLimit)
+                return -1;
+        if(index + this->sizeNum -1 < this->totalNum)
+            if(pipeItems[index + this->sizeNum -1]->width + width > widthSumLimit)
+                return -1;
+    }
     return 0;
 }
 
@@ -134,7 +178,26 @@ int MainWindow::getPipeType(int index)
     else return -1;
 }
 
-
+void MainWindow::changePipeWidth(PipeItem* pipeItem, int width)
+{
+    this->pipesScene->removeItem(pipeItem);
+    QRectF rect = pipeItem->rect();
+    double w = width, oldW = pipeItem->width;
+    pipeItem->width = width;
+    int pipeType = this->getPipeType(pipeItem->index);
+    if(pipeType == 0) {
+        //rect.setHeight(w/100);
+        //rect.setY(rect.y() + (w - oldW) / 100);
+        rect.setRect(rect.x(), rect.y() + (oldW - w) / 200 * pixUnit, rect.width(), w/100 * pixUnit);
+    }
+    else if(pipeType == 1) {
+        //rect.setWidth(w/100);
+        //rect.setX(rect.x() + (w - oldW) / 100);
+        rect.setRect(rect.x() + (oldW - w)/200 * pixUnit, rect.y(), w/100 * pixUnit, rect.height());
+    }
+    pipeItem->setRect(rect);
+    this->pipesScene->addItem(pipeItem);
+}
 
 QRectF MainWindow::getPipeRect(int index)
 {
@@ -229,9 +292,10 @@ void MainWindow::resetInputOutput()
 int MainWindow::calculateFlow()
 {
     vector<double> pipesLength(this->totalNum + 5);
+    BackCompute bc;
     for(int i = 0; i < this->totalNum + 5; ++i)
         pipesLength[i] = this->pipeLength[i];
-    vector<double> results = caluconspeed(this->sizeNum, pipesLength, intoPipePos[0] , intoPipePos[1], outPipePos[0], outPipePos[1], outPipePos[2]);
+    vector<double> results = bc.caluconspeed(this->sizeNum, pipesLength, intoPipePos[0] , intoPipePos[1], outPipePos[0], outPipePos[1], outPipePos[2]);
     //qDebug("results %lf %lf %lf", results[0], results[1], results[2]);
     ui->lcdNum1->setText(QString::number(results[0], 'g', 3));
     ui->lcdNum2->setText(QString::number(results[1], 'g', 3));
